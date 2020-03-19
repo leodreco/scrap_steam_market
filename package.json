@@ -4,12 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node ./src/server.js",
+    "test": "node test.js"
   },
   "keywords": [],
   "author": "Alegre",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "mysql2": "^2.1.0",
     "puppeteer": "^2.1.1"
   }
 }

@@ -1,0 +1,19 @@
+*, *::before, *::after{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    color: #8F98A0;
+    background: #1b2838;
+}
+
+.main{
+    padding: 0 150px;
+}
+
+.main > .table_block{
+    margin-bottom: 50px;
+}

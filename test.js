@@ -8,7 +8,6 @@ const puppeteer = require('puppeteer');
     });
     const page = await browser.newPage();
     await page.goto('https://steamcommunity.com/market/');
-
     var arr_games = await page.evaluate(() => {
         var select = document.querySelector('#market_advancedsearch_appselect_options_apps');
         var games = select.querySelectorAll('.popup_item.popup_menu_item.market_advancedsearch_appname')

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/css.css">
+    <title>Inicio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@2.1.7"></script>
+    <style>
+        .dataTable-wrapper .btn_add{
+            color:white;
+            background-color: black;
+            font-size: larger;
+            height: 30px;
+            width: 30px;
+            border: 0;
+            border-radius: 5px;
+        }
+
+        /*Estilo input search */
+        .dataTable-wrapper .dataTable-input{
+            background-color: rgba(0, 0, 0, 0.3);
+            border-style: hidden;
+            border-radius: 3px;
+            font-size: large;
+            color: whitesmoke;
+            outline: none;
+            transition: background-color 0.1s ease;
+        }
+        .dataTable-wrapper .dataTable-input:focus{
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Estilo th */
+        /* .dataTable-wrapper .dataTable-sorter{
+            outline: none;
+        } */
+        .dataTable-wrapper thead tr{
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        .dataTable-wrapper .dataTable-sorter::after,.dataTable-wrapper .dataTable-sorter::before{
+            opacity: 0;
+            border-bottom-color: white;
+        }
+        .asc .dataTable-sorter::after, .desc .dataTable-sorter::before{
+            opacity: 1;
+            border-bottom-color: white;
+        }
+        .dataTable-sorter::before{
+            border-top-color: white;
+        }
+
+        /* Estilo paginación */
+        .dataTable-pagination a{
+            color:whitesmoke;
+            border-radius: 4px;
+        }
+        .dataTable-pagination .pager a{
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        .dataTable-pagination .active a, .dataTable-pagination .active a:focus, .dataTable-pagination .active a:hover{
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .dataTable-pagination a:hover{
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="table_block">
+            <h2>Con seguimiento</h2>
+            <table id="games">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th></th>
+                        <th>Articulos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="table_block">
+            <h2>Todos</h2>
+            <table id="games_steam">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th></th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        DataTable = simpleDatatables.DataTable;
+        var dt_Games = new DataTable('#games',{
+            fixedHeight: true,
+            labels: {
+                placeholder: "Buscar...",
+                perPage: "{select} entries per page",
+                noRows: "No hay resultados",
+                info: "Mostrando {start} a {end} de {rows}",
+            },
+            layout: {
+                top: "{search}",//{select}
+                bottom: "{info}{pager}"
+            },
+            columns: [{select: 2, sortable: false}],
+            ajax: '/games/list'
+        });
+        var dt_Steam = new DataTable('#games_steam',{
+            fixedHeight: true,
+            labels: {
+                placeholder: "Buscar...",
+                perPage: "{select} entries per page",
+                noRows: "No hay resultados",
+                info: "Mostrando {start} a {end} de {rows}",
+            },
+            layout: {
+                top: "{search}",//{select}
+                bottom: "{info}{pager}"
+            },
+            columns: [
+                {select: 2, sortable: false, render: function(data, cell, row){
+                    return `<img src="${data}">`;
+                }},
+                {select: 3, sortable: false, render: function(data, cell, row){
+                    let id =  row.querySelector('td').innerText;
+                    return `<button class="btn_add" onclick="agregar(${id});"><i class="fas fa-plus"></i></button>`;
+                }}
+            ],
+            ajax: '/games/list_steam'
+        });
+
+        const agregar = (id_game) => {
+            fetch('/games/add',{
+                method: 'POST',
+                body: JSON.stringify({id_game}),
+                headers: {'Content-type': 'application/json'}
+            })
+            .then(res => {return res.json()})
+            .then(text => {
+                console.log(text);
+            });
+        }
+    </script>
+</body>
+</html>
